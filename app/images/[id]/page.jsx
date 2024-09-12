@@ -1,8 +1,33 @@
+'use client';
 import UserImages from '@/app/components/UserImages/UserImages';
 import { getUserImages } from '@/lib/fetch';
-const page = async ({ params }) => {
+import { useEffect } from 'react';
+const Page = ({ params }) => {
   const userId = params.id;
-  const images = await getUserImages(userId);
+  // const images = await getUserImages(userId);
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await fetch(`/api/images/${userId}`, {
+          headers: {
+            'x-api-key': process.env.API_SECRET_KEY,
+          },
+        });
+        const data = await res.json();
+        setImages(data);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    if (userId) {
+      fetchImages();
+    }
+  }, [userId]);
+
   if (images?.length === 0) {
     return (
       <div className="flex gap-4 items-center justify-center h-screen">
@@ -26,7 +51,9 @@ const page = async ({ params }) => {
       </div>
     );
   }
-
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
   return (
     <div>
       <div className="w-full h-full">
@@ -52,4 +79,4 @@ const page = async ({ params }) => {
   );
 };
 
-export default page;
+export default Page;
