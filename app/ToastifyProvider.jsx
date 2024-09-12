@@ -6,7 +6,7 @@ const ToastProvider = ({ children }) => {
   return (
     <>
       {children}
-      <ToastContainer theme="dark" autoClose={3000} />
+      <ToastContainer theme="dark" autoClose={3000} draggable={false} />
     </>
   );
 };
