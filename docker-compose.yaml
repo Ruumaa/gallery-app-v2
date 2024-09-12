@@ -1,0 +1,32 @@
+version: '3'
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  backend:
+    build: .
+    networks:
+      - app-tier
+    ports:
+      - '3000:3000'
+    environment:
+      DATABASE_URL: "postgresql://postgres:1234@db:5432/gallery_app?schema=public"
+    depends_on:
+      - db
+    volumes:
+      - ./generated:/app/generated
+
+  db:
+    image: postgres:15-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "1234"
+      POSTGRES_DB: gallery_app
+      POSTGRES_HOST_AUTH_METHOD: trust
+    
+    networks:
+      - app-tier
