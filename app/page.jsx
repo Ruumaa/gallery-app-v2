@@ -1,8 +1,28 @@
-import { getImages } from '@/lib/fetch';
+'use client';
+// import { getImages } from '@/lib/fetch';
 import LightboxOpen from './components/Lightbox/LightboxOpen';
+import { useEffect, useState } from 'react';
 
-export default async function Home() {
-  const images = await getImages();
+export default function Home() {
+  const [images, setImages] = useState([]);
+  const [error, setError] = useState(null);
+  useEffect(() => {
+    const fetchImages = async () => {
+      try {
+        const res = await fetch('/api/images', {
+          headers: {
+            'x-api-key': process.env.API_SECRET_KEY,
+          },
+        });
+        const data = await res.json();
+        setImages(data);
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    fetchImages();
+  }, []);
 
   if (images.data?.length === 0) {
     return (
@@ -26,6 +46,9 @@ export default async function Home() {
         </h1>
       </div>
     );
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>;
   }
 
   return (
