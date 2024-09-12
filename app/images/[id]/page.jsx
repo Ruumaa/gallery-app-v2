@@ -1,9 +1,10 @@
 'use client';
 import UserImages from '@/app/components/UserImages/UserImages';
 import { getUserImages } from '@/lib/fetch';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 const Page = ({ params }) => {
-  const userId = params.id;
+  // const userId = params.id;
+  // console.log(userId);
   // const images = await getUserImages(userId);
   const [images, setImages] = useState([]);
   const [error, setError] = useState(null);
@@ -11,7 +12,10 @@ const Page = ({ params }) => {
   useEffect(() => {
     const fetchImages = async () => {
       try {
+        const userId = params.id;
+        console.log(userId, '<<<<<<<<<<<');
         const res = await fetch(`/api/images/${userId}`, {
+          method: 'GET',
           headers: {
             'x-api-key': process.env.API_SECRET_KEY,
           },
@@ -22,11 +26,8 @@ const Page = ({ params }) => {
         setError(error);
       }
     };
-
-    if (userId) {
-      fetchImages();
-    }
-  }, [userId]);
+    fetchImages();
+  }, [params.id]);
 
   if (images?.length === 0) {
     return (
