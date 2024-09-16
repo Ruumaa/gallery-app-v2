@@ -1,60 +1,13 @@
 'use client';
+
+import NoPhotos from '@/app/components/NoPhotos/NoPhotos';
 import UserImages from '@/app/components/UserImages/UserImages';
-import { getUserImages } from '@/lib/fetch';
-import { useEffect, useState } from 'react';
+import Loading from '@/app/loading';
+import { displayImages } from '@/lib/fetch';
 const Page = ({ params }) => {
-  // const userId = params.id;
-  // console.log(userId);
-  // const images = await getUserImages(userId);
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        const userId = params.id;
-        console.log(userId, '<<<<<<<<<<<');
-        const res = await fetch(`/api/images/${userId}`, {
-          method: 'GET',
-          headers: {
-            'x-api-key': process.env.API_SECRET_KEY,
-          },
-        });
-        const data = await res.json();
-        setImages(data);
-      } catch (error) {
-        setError(error);
-      }
-    };
-    fetchImages();
-  }, [params.id]);
-
-  if (images?.length === 0) {
-    return (
-      <div className="flex gap-4 items-center justify-center h-screen">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="w-28 h-w-28"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
-          />
-        </svg>
-        <h1 className="text-5xl font-mono text-primary font-semibold">
-          No photos found, Let&apos;s upload some!
-        </h1>
-      </div>
-    );
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
+  const userId = params.id;
+  const { useImageById } = displayImages(userId);
+  const { images, isLoading } = useImageById(userId);
   return (
     <div>
       <div className="w-full h-full">
@@ -74,7 +27,13 @@ const Page = ({ params }) => {
           </p>
         </div>
         <div className="divider mb-12"></div>
-        <UserImages images={images} />
+        {images?.data?.length === 0 ? (
+          <NoPhotos />
+        ) : isLoading ? (
+          <Loading />
+        ) : (
+          <UserImages images={images} />
+        )}
       </div>
     </div>
   );

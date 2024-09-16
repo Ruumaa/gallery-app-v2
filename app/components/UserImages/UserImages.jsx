@@ -1,12 +1,11 @@
 'use client';
 import { deleteUserImages } from '@/lib/fetch';
 import Image from 'next/image';
-import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+import { mutate } from 'swr';
 
 const UserImages = ({ images }) => {
-  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStates, setLoadingStates] = useState({});
@@ -19,13 +18,24 @@ const UserImages = ({ images }) => {
     try {
       setIsLoading(true);
       const response = await deleteUserImages(id);
-      if (response.error) {
+      if (response.status !== 204) {
         toast.error('Something went wrong');
         console.error(response.error);
       } else {
+        mutate(
+          `/api/images/${images.data[0]?.userId}`,
+          (data) => {
+            const updatedImages = data.data.filter((image) => image.id !== id);
+            return {
+              ...data,
+              data: updatedImages,
+            };
+          },
+          false
+        );
+
         toast.success('Delete image success');
         setIsOpen(false);
-        router.refresh();
       }
     } catch (error) {
       console.error('Error during deleting:', error);
@@ -45,7 +55,7 @@ const UserImages = ({ images }) => {
   return (
     <div>
       <div className="max-w-sm sm:max-w-md lg:max-w-2xl xl:max-w-5xl m-8  grid grid-rows-1 xl:grid-cols-4 gap-4 ">
-        {images?.map((image, index) => (
+        {images?.data.map((image, index) => (
           <div key={index} className="w-full h-80 relative">
             <div
               className="absolute top-0 right-0 m-2 p-2 cursor-pointer opacity-50 transition-opacity duration-300 hover:opacity-100"
@@ -111,6 +121,7 @@ const UserImages = ({ images }) => {
               className={`rounded-lg border shadow-lg transition-all duration-500 ${
                 loadingStates[index] !== false ? 'blur-sm' : ''
               }`}
+              priority={index === 0}
               width={500}
               height={300}
               onLoad={() => handleLoadingComplete(index)}

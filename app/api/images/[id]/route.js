@@ -1,9 +1,31 @@
+import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
+
+export const GET = async (req, context) => {
+  try {
+    const { params } = context;
+    const response = await prisma.image.findMany({
+      where: {
+        userId: params.id,
+      },
+    });
+    return NextResponse.json(
+      { msg: 'Get image success', data: response },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { msg: 'Get image failed', error: error },
+      { status: 500 }
+    );
+  }
+};
 
 export const DELETE = async (req, context) => {
   try {
     const { params } = context;
-    const image = await prisma.image.delete({
+    await prisma.image.delete({
       where: {
         id: params.id,
       },

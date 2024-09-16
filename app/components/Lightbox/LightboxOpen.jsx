@@ -14,7 +14,7 @@ import Images from './Images';
 
 const LightboxOpen = ({ images }) => {
   const [index, setIndex] = useState(-1);
-  const sources = images.data?.map((image) => image.imageUrl);
+  const sources = images?.data?.map((image) => image.imageUrl);
   const slides = sources?.map((src) => ({
     src: src,
   }));
