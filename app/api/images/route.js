@@ -10,7 +10,12 @@ export const GET = async () => {
     });
     return NextResponse.json(
       { msg: 'Get image success', data: response },
-      { status: 200 }
+      {
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-store, must-revalidate',
+        },
+      }
     );
   } catch (error) {
     console.error(error);

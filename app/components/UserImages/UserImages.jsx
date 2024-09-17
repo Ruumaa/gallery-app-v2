@@ -22,18 +22,10 @@ const UserImages = ({ images }) => {
         toast.error('Something went wrong');
         console.error(response.error);
       } else {
-        mutate(
-          `/api/images/${images.data[0]?.userId}`,
-          (data) => {
-            const updatedImages = data.data.filter((image) => image.id !== id);
-            return {
-              ...data,
-              data: updatedImages,
-            };
-          },
-          false
-        );
-
+        mutate(`/api/images/${images.data[0]?.userId}`, null, {
+          revalidate: true,
+        });
+        mutate('/api/images', null, { revalidate: true });
         toast.success('Delete image success');
         setIsOpen(false);
       }

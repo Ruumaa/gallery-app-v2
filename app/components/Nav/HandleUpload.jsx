@@ -1,7 +1,6 @@
 'use client';
 
 import { uploadeImage } from '@/lib/fetch';
-import { headers } from '@/next.config';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -50,7 +49,7 @@ const HandleUpload = ({ session }) => {
       if (uploadImage?.error) {
         toast.error('Invalid image file');
       } else {
-        mutate('/api/images');
+        mutate('/api/images', null, { revalidate: true });
         toast.success(`${uploadImage.msg}`);
         setIsOpen(false);
         router.push('/');

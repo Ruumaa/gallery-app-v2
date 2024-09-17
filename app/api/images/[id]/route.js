@@ -8,15 +8,18 @@ export const GET = async (req, context) => {
       where: {
         userId: params.id,
       },
+      orderBy: {
+        created_at: 'desc',
+      },
     });
     return NextResponse.json(
-      { msg: 'Get image success', data: response },
+      { msg: 'Get user image success', data: response },
       { status: 200 }
     );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
-      { msg: 'Get image failed', error: error },
+      { msg: 'Get user image failed', error: error },
       { status: 500 }
     );
   }
