@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build && prisma generate",
-    "start": "prisma migrate deploy && next start",
+    "start": "next start",
     "lint": "next lint",
     "dev:docker": "prisma migrate dev && next dev"
   },
