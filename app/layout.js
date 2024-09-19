@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
             <Nav />
             <div className="flex-grow overflow-y-auto bg-page text-default-text ">
               <main className="max-w-sm sm:max-w-md lg:max-w-2xl xl:max-w-5xl mx-auto px-3 sm:px-0 w-full">
-                <div className="">{children}</div>
+                {children}
               </main>
             </div>
           </div>

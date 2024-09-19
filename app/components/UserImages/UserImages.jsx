@@ -110,7 +110,7 @@ const UserImages = ({ images }) => {
                 height: '100%',
                 objectFit: 'cover',
               }}
-              className={`rounded-lg border shadow-lg transition-all duration-500 ${
+              className={`rounded-lg border shadow-lg transition-all duration-200 ${
                 loadingStates[index] !== false ? 'blur-sm' : ''
               }`}
               priority={index === 0}

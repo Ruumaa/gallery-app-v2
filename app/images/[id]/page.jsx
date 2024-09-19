@@ -6,7 +6,7 @@ import Loading from '@/app/loading';
 import { displayImages } from '@/lib/fetch';
 const Page = ({ params }) => {
   const userId = params.id;
-  const { useImageById } = displayImages(userId);
+  const { useImageById } = displayImages();
   const { images, isLoading } = useImageById(userId);
   return (
     <div>
