@@ -4,12 +4,14 @@ import NoPhotos from '@/app/components/NoPhotos/NoPhotos';
 import UserImages from '@/app/components/UserImages/UserImages';
 import Loading from '@/app/loading';
 import { displayImages } from '@/lib/fetch';
+import SessionChecker from '@/lib/SessionChecker';
+
 const Page = ({ params }) => {
   const userId = params.id;
   const { useImageById } = displayImages();
   const { images, isLoading } = useImageById(userId);
   return (
-    <div>
+    <SessionChecker>
       <div className="w-full h-full">
         <div className="xl:w-3/4 my-10">
           <h1 className="text-4xl xl:text-6xl font-semibold tracking-tight xl:tracking-normal">
@@ -35,7 +37,7 @@ const Page = ({ params }) => {
           <UserImages images={images} />
         )}
       </div>
-    </div>
+    </SessionChecker>
   );
 };
 

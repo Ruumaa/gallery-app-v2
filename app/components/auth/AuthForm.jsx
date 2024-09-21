@@ -2,7 +2,7 @@
 
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
-const AuthForm = ({ isRegister, submit }) => {
+const AuthForm = ({ isRegister, submit, loading }) => {
   const {
     register,
     handleSubmit,
@@ -112,7 +112,16 @@ const AuthForm = ({ isRegister, submit }) => {
             <div className="flex mx-auto w-full absolute  ml-auto mr-auto left-0 right-0 text-center -bottom-11 z-10">
               <div className="card w-3/4 h-16 mx-auto">
                 <button className="btn btn-primary shadow-2xl ">
-                  {isRegister ? 'Register' : 'Login'}
+                  {loading ? (
+                    <>
+                      <span className="loading loading-spinner loading-sm"></span>
+                      Wait a moment...
+                    </>
+                  ) : isRegister ? (
+                    'Register'
+                  ) : (
+                    'Login'
+                  )}
                 </button>
               </div>
             </div>
