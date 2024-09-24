@@ -1,6 +1,6 @@
 'use client';
 
-import { uploadeImage } from '@/lib/fetch';
+import { postCloudinary, uploadeImage } from '@/lib/fetch';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
@@ -11,50 +11,59 @@ const HandleUpload = ({ session }) => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const handleModal = async (session) => {
-    if (!session) {
-      return toast.error('You should login first');
-    } else {
-      setIsOpen(!isOpen);
-    }
-  };
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
+
+  const handleModal = async (session) => {
+    if (!session) {
+      return toast.error('You should login first');
+    } else {
+      setIsOpen((prev) => {
+        if (!prev) reset();
+        return !prev;
+      });
+    }
+  };
+
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
       const image = await data.image[0];
+      console.log(image, '<<<<');
+
+      // Validation
+      const maxSize = 10 * 1024 * 1024;
+      const validTypes = ['image/svg+xml', 'image/png', 'image/jpeg'];
+      if (!validTypes.includes(image.type)) {
+        setIsLoading(false);
+        return toast.error('Only SVG, PNG, and JPG files are allowed.');
+      }
+      if (image.size > maxSize) {
+        setIsLoading(false);
+        return toast.error('File size exceeds the 10MB limit.');
+      }
+
       const formData = new FormData();
       formData.append('file', image);
       formData.append('upload_preset', 'galleryApp');
 
-      // ------ POST to cloudinary --------------------
-      const uploadResponse = await fetch(
-        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_ID}/image/upload`,
-        {
-          method: 'POST',
-          body: formData,
-        }
-      );
-      const uploadedImage = await uploadResponse.json();
-      const imageUrl = await uploadedImage.url;
+      // Post to cloudinary
+      const cloudinaryImage = await postCloudinary(formData);
+      const imageUrl = await cloudinaryImage.url;
 
-      // ------- POST to database -----------------
+      // Post to database
       const userId = await session.user.id;
-      const uploadImage = await uploadeImage(userId, imageUrl);
-      if (uploadImage?.error) {
-        toast.error('Invalid image file');
-      } else {
-        mutate('/api/images', null, { revalidate: true });
-        toast.success(`${uploadImage.msg}`);
-        setIsOpen(false);
-        router.push('/');
-        router.refresh();
-      }
+      const postImage = await uploadeImage(userId, imageUrl);
+      mutate('/api/images', null);
+      toast.success(`${postImage.msg}`);
+
+      setIsOpen(false);
+      router.push('/');
     } catch (error) {
       console.error('Error during submission:', error);
       toast.error('An error occurred while processing your request.');
@@ -92,7 +101,7 @@ const HandleUpload = ({ session }) => {
                 className="mt-1 ml-1 text-xs xl:text-sm text-gray-500 dark:text-gray-300"
                 id="file_input_help"
               >
-                Format file: SVG, PNG, JPG
+                Format file: SVG, PNG, JPG and max 10MB
               </p>
               <div className="modal-action">
                 <button

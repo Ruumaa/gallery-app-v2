@@ -66,12 +66,11 @@ const UserImages = ({ images }) => {
                 />
               </svg>
 
-              {/* ----------- MODAL ----------------- */}
-
+              {/* Modal */}
               <div className={isOpen ? 'modal modal-open' : 'modal'}>
                 <div className="bg-base-100 rounded-md p-5 xl:p-8">
                   <h3 className="font-bold xl:text-lg">
-                    Are you sure delete this image?
+                    Are you sure delete this image ?
                   </h3>
                   <div className="modal-action gap-3">
                     <button

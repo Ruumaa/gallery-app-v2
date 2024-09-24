@@ -12,11 +12,11 @@ const SignUpForm = () => {
     try {
       setLoading(true);
       const { username, password } = await values;
-      const response = await fetch(`${BASE_URL}/api/auth`, {
+      const response = await fetch(`/api/auth`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'x-api-key': process.env.API_SECRET_KEY,
+          'x-api-key': process.env.NEXT_PUBLIC_API_SECRET_KEY,
         },
         body: JSON.stringify({ username, password }),
       });

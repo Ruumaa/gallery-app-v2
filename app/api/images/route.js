@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from 'next/server';
 
-export const GET = async () => {
+export const GET = async (req, context) => {
   try {
     const response = await prisma.image.findMany({
       orderBy: {
@@ -10,12 +10,7 @@ export const GET = async () => {
     });
     return NextResponse.json(
       { msg: 'Get image success', data: response },
-      {
-        status: 200,
-        headers: {
-          'Cache-Control': 'no-store, must-revalidate',
-        },
-      }
+      { status: 200 }
     );
   } catch (error) {
     console.error(error);

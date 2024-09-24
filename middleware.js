@@ -11,5 +11,10 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/api/images', '/api/images/upload'],
+  matcher: [
+    '/api/images',
+    '/api/images/upload',
+    '/api/auth',
+    '/api/auth/reset',
+  ],
 };
