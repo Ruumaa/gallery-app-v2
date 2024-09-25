@@ -34,7 +34,6 @@ const HandleUpload = ({ session }) => {
     try {
       setIsLoading(true);
       const image = await data.image[0];
-      console.log(image, '<<<<');
 
       // Validation
       const maxSize = 10 * 1024 * 1024;

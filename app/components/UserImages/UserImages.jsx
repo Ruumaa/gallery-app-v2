@@ -7,10 +7,12 @@ import { mutate } from 'swr';
 
 const UserImages = ({ images }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [imageId, setImageId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [loadingStates, setLoadingStates] = useState({});
 
-  const handleModal = () => {
+  const handleModal = (id) => {
+    setImageId(id);
     setIsOpen(!isOpen);
   };
 
@@ -51,7 +53,7 @@ const UserImages = ({ images }) => {
           <div key={index} className="w-full h-80 relative">
             <div
               className="absolute top-0 right-0 m-2 p-2 cursor-pointer opacity-50 transition-opacity duration-300 hover:opacity-100"
-              onClick={handleModal}
+              onClick={() => handleModal(image.id)}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -65,39 +67,6 @@ const UserImages = ({ images }) => {
                   clipRule="evenodd"
                 />
               </svg>
-
-              {/* Modal */}
-              <div className={isOpen ? 'modal modal-open' : 'modal'}>
-                <div className="bg-base-100 rounded-md p-5 xl:p-8">
-                  <h3 className="font-bold xl:text-lg">
-                    Are you sure delete this image ?
-                  </h3>
-                  <div className="modal-action gap-3">
-                    <button
-                      type="button"
-                      className="btn btn-error btn-sm xl:btn-md hover:bg-red-600"
-                      onClick={() => handleDelete(image.id)}
-                      disabled={isLoading}
-                    >
-                      {isLoading ? (
-                        <>
-                          <span className="loading loading-spinner loading-sm"></span>
-                          Deleting...
-                        </>
-                      ) : (
-                        'Delete'
-                      )}
-                    </button>
-                    <button
-                      type="button"
-                      className="btn btn-sm xl:btn-md btn-base-100"
-                      onClick={handleModal}
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              </div>
             </div>
             <Image
               key={image.id}
@@ -119,6 +88,38 @@ const UserImages = ({ images }) => {
             />
           </div>
         ))}
+      </div>
+      {/* Modal */}
+      <div className={isOpen ? 'modal modal-open' : 'modal'}>
+        <div className="bg-base-100 rounded-md p-5 xl:p-8">
+          <h3 className="font-bold xl:text-lg">
+            Are you sure delete this image ?
+          </h3>
+          <div className="modal-action gap-3">
+            <button
+              type="button"
+              className="btn btn-error btn-sm xl:btn-md hover:bg-red-600"
+              onClick={() => handleDelete(imageId)}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm"></span>
+                  Deleting...
+                </>
+              ) : (
+                'Delete'
+              )}
+            </button>
+            <button
+              type="button"
+              className="btn btn-sm xl:btn-md btn-base-100"
+              onClick={handleModal}
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
