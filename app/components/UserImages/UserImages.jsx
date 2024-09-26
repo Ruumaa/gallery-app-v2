@@ -24,7 +24,9 @@ const UserImages = ({ images }) => {
         toast.error('Something went wrong');
         console.error(response.error);
       } else {
-        mutate(`/api/images/${images.data[0]?.userId}`);
+        mutate(`/api/images/${images.data[0]?.userId}`, null, {
+          revalidate: true,
+        });
         toast.success('Delete image success');
         setIsOpen(false);
       }

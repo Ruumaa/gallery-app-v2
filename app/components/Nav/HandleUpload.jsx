@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-toastify';
-import { mutate } from 'swr';
 
 const HandleUpload = ({ session }) => {
   const router = useRouter();
