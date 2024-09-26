@@ -58,7 +58,6 @@ const HandleUpload = ({ session }) => {
       // Post to database
       const userId = await session.user.id;
       const postImage = await uploadeImage(userId, imageUrl);
-      mutate('/api/images', null);
       toast.success(`${postImage.msg}`);
 
       setIsOpen(false);
