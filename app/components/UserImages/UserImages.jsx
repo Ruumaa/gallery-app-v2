@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { mutate } from 'swr';
 
-const UserImages = ({ images }) => {
+const UserImages = ({ images, userId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [imageId, setImageId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +20,12 @@ const UserImages = ({ images }) => {
     try {
       setIsLoading(true);
       const response = await deleteUserImages(id);
+
       if (response.status !== 204) {
         toast.error('Something went wrong');
         console.error(response.error);
       } else {
-        mutate(`/api/images/${images.data[0]?.userId}`, null, {
+        mutate(`/api/images/${userId}`, null, {
           revalidate: true,
         });
         toast.success('Delete image success');

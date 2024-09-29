@@ -34,7 +34,7 @@ const Page = ({ params }) => {
         ) : isLoading ? (
           <Loading />
         ) : (
-          <UserImages images={images} />
+          <UserImages images={images} userId={userId} />
         )}
       </div>
     </SessionChecker>

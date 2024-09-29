@@ -57,8 +57,8 @@ const HandleUpload = ({ session }) => {
       // Post to database
       const userId = await session.user.id;
       const postImage = await uploadeImage(userId, imageUrl);
-      toast.success(`${postImage.msg}`);
 
+      toast.success(`${postImage.msg}`);
       setIsOpen(false);
       router.push('/');
     } catch (error) {
