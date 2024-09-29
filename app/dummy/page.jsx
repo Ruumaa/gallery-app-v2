@@ -1,11 +1,12 @@
-'use client';
-import { displayImages } from '@/lib/fetch';
+import { displayImages, getImageNative } from '@/lib/fetch';
 import Image from 'next/image';
 import NoPhotos from '../components/NoPhotos/NoPhotos';
 
-const Page = () => {
-  const { useImages } = displayImages();
-  const { images, isLoading } = useImages();
+const Page = async () => {
+  // const { useImages } = displayImages();
+  // const { images, isLoading } = useImages();
+  const images = await getImageNative();
+  console.log(images);
   return (
     <div>
       <div className="w-full h-full">
@@ -21,7 +22,7 @@ const Page = () => {
           </p>
         </div>
         <div className="divider mb-12 mt-10"></div>
-        {images?.data?.length === 0 ? (
+        {/* {images?.data?.length === 0 ? (
           <NoPhotos />
         ) : isLoading ? (
           'Loading...'
@@ -41,7 +42,22 @@ const Page = () => {
               </div>
             ))}
           </div>
-        )}
+        )} */}
+        <div className="w-full grid grid-cols-3 gap-4 mb-20 ">
+          {images?.data?.map((image) => (
+            <div className="container" key={image.id}>
+              <Image
+                src={image.imageUrl}
+                alt="pics"
+                width={500}
+                height={500}
+                objectFit="cover"
+                objectPosition="center"
+                className="rounded-xl h-full"
+              />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
