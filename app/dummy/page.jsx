@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import NoPhotos from '../components/NoPhotos/NoPhotos';
-import { getImageNative } from '@/lib/ssr';
+import { getImageNative, getImageSupa } from '@/lib/ssr';
 
 export const dynamic = 'force-dynamic';
 
 const Page = async () => {
-  const images = await getImageNative();
+  const images = await getImageSupa();
+  console.log(images);
   return (
     <div>
       <div className="w-full h-full">
