@@ -22,11 +22,11 @@ const Page = async () => {
           </p>
         </div>
         <div className="divider mb-12 mt-10"></div>
-        {images?.data?.length === 0 ? (
+        {images.data.length < 1 ? (
           <NoPhotos />
         ) : (
           <div className="w-full grid grid-cols-3 gap-4 mb-20 ">
-            {images?.data?.map((image) => (
+            {images.data.map((image) => (
               <div className="container" key={image.id}>
                 <Image
                   src={image.imageUrl}
@@ -41,6 +41,7 @@ const Page = async () => {
             ))}
           </div>
         )}
+        {JSON.stringify(images.data)}
       </div>
     </div>
   );
