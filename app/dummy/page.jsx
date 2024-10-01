@@ -1,28 +1,12 @@
 import Image from 'next/image';
 import NoPhotos from '../components/NoPhotos/NoPhotos';
-import { BASE_URL } from '@/lib/base_url';
-// import { getImageNative, getImageSupa } from '@/lib/ssr';
+import { getImageSupa } from '@/lib/ssr';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const Page = async () => {
-  const getImageNative = async () => {
-    try {
-      const images = await fetch(`${BASE_URL}/api/images`, {
-        method: 'GET',
-        headers: {
-          'x-api-key': process.env.NEXT_PUBLIC_API_SECRET_KEY,
-        },
-        cache: 'no-store',
-      });
-      return await images.json();
-    } catch (error) {
-      console.error('Error get image', error);
-    }
-  };
-
-  const images = await getImageNative();
+  const images = await getImageSupa();
   return (
     <div>
       <div className="w-full h-full">

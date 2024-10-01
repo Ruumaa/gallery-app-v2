@@ -1,13 +1,12 @@
-'use client';
-
-import { displayImages } from '@/lib/fetch';
 import LightboxOpen from './components/Lightbox/LightboxOpen';
-import Loading from './loading';
 import NoPhotos from './components/NoPhotos/NoPhotos';
+import { getImageSupa } from '@/lib/ssr';
 
-export default function Home() {
-  const { useImages } = displayImages();
-  const { images, isLoading } = useImages();
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
+export default async function Home() {
+  const images = await getImageSupa();
 
   return (
     <>
@@ -28,8 +27,6 @@ export default function Home() {
           <div className="divider mb-12"></div>
           {images?.data?.length === 0 ? (
             <NoPhotos />
-          ) : isLoading ? (
-            <Loading />
           ) : (
             <LightboxOpen images={images} />
           )}
