@@ -3,7 +3,6 @@ import NoPhotos from '../components/NoPhotos/NoPhotos';
 import { getImageSupa } from '@/lib/ssr';
 
 export const dynamic = 'force-dynamic';
-export const revalidate = 0;
 
 const Page = async () => {
   const images = await getImageSupa();
