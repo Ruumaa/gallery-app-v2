@@ -61,6 +61,7 @@ const HandleUpload = ({ session }) => {
       toast.success(`${postImage.msg}`);
       setIsOpen(false);
       router.push('/');
+      router.refresh();
     } catch (error) {
       console.error('Error during submission:', error);
       toast.error('An error occurred while processing your request.');
