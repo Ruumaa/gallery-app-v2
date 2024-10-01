@@ -1,11 +1,27 @@
 import Image from 'next/image';
 import NoPhotos from '../components/NoPhotos/NoPhotos';
-import { getImageNative, getImageSupa } from '@/lib/ssr';
+import { BASE_URL } from '@/lib/base_url';
+// import { getImageNative, getImageSupa } from '@/lib/ssr';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 const Page = async () => {
+  const getImageNative = async () => {
+    try {
+      const images = await fetch(`${BASE_URL}/api/images`, {
+        method: 'GET',
+        headers: {
+          'x-api-key': process.env.NEXT_PUBLIC_API_SECRET_KEY,
+        },
+        cache: 'no-store',
+      });
+      return await images.json();
+    } catch (error) {
+      console.error('Error get image', error);
+    }
+  };
+
   const images = await getImageNative();
   return (
     <div>
@@ -19,15 +35,15 @@ const Page = async () => {
             Discover the allure of visual art. Immerse yourself in a captivating
             collection of stunning images, showcasing the wonders of nature,
             life&apos;s extraordinary moments, and pixelated masterpieces.
-            {`${images.data[0].imageUrl}`}
+            {`${images?.data[0]?.imageUrl ?? 'not fetched'}`}
           </p>
         </div>
         <div className="divider mb-12 mt-10"></div>
-        {images.data.length < 1 ? (
+        {images?.data.length < 1 ? (
           <NoPhotos />
         ) : (
           <div className="w-full grid grid-cols-3 gap-4 mb-20 ">
-            {images.data.map((image) => (
+            {images?.data.map((image) => (
               <div className="container" key={image.id}>
                 <Image
                   src={image.imageUrl}
