@@ -1,16 +1,13 @@
-// 'use client';
+'use client';
 
-// import { displayImages } from '@/lib/fetch';
-import { getImageSupa } from '@/lib/ssr';
+import { displayImages } from '@/lib/fetch';
 import LightboxOpen from './components/Lightbox/LightboxOpen';
-// import Loading from './loading';
+import Loading from './loading';
 import NoPhotos from './components/NoPhotos/NoPhotos';
 
-export default async function Home() {
-  const images = await getImageSupa();
-
-  // const { useImages } = displayImages();
-  // const { images, isLoading } = useImages();
+export default function Home() {
+  const { useImages } = displayImages();
+  const { images, isLoading } = useImages();
 
   return (
     <>
@@ -29,10 +26,9 @@ export default async function Home() {
         <div className="divider mb-12"></div>
         {images?.data?.length === 0 ? (
           <NoPhotos />
+        ) : isLoading ? (
+          <Loading />
         ) : (
-          // : isLoading ? (
-          //   <Loading />
-          // )
           <LightboxOpen images={images} />
         )}
       </div>
