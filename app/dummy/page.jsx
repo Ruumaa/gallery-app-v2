@@ -19,6 +19,7 @@ const Page = async () => {
             Discover the allure of visual art. Immerse yourself in a captivating
             collection of stunning images, showcasing the wonders of nature,
             life&apos;s extraordinary moments, and pixelated masterpieces.
+            {`${images.data[0].imageUrl}`}
           </p>
         </div>
         <div className="divider mb-12 mt-10"></div>
@@ -41,7 +42,6 @@ const Page = async () => {
             ))}
           </div>
         )}
-        {JSON.stringify(images.data)}
       </div>
     </div>
   );
